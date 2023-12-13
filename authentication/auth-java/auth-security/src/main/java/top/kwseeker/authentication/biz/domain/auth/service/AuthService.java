@@ -1,34 +1,39 @@
 package top.kwseeker.authentication.biz.domain.auth.service;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.xingyuv.captcha.model.common.ResponseModel;
 import com.xingyuv.captcha.model.vo.CaptchaVO;
 import com.xingyuv.captcha.service.CaptchaService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import top.kwseeker.authentication.biz.common.enums.CommonStatusEnum;
 import top.kwseeker.authentication.biz.common.exception.ErrorCodes;
 import top.kwseeker.authentication.biz.common.exception.ServiceExceptionUtil;
 import top.kwseeker.authentication.biz.domain.auth.model.LoginReq;
 import top.kwseeker.authentication.biz.domain.auth.model.LoginResp;
-import top.kwseeker.authentication.biz.domain.auth.model.dataobject.UserDO;
+import top.kwseeker.authentication.biz.infrastructure.dal.po.UserPO;
 
 import javax.annotation.Resource;
 
 @Service
 public class AuthService implements IAuthService {
 
-    @Value("${captcha.enable:true}")
+    @Value("${auth.captcha.enable:true}")
     private Boolean captchaEnable;
 
     @Resource
     private CaptchaService captchaService;
+    @Resource
+    private IUserService userService;
 
     @Override
     public LoginResp login(LoginReq req) {
         //校验验证码
         validateCaptcha(req);
         //用户名密码验证
-        UserDO userDO = authenticate(req.getUsername(), req.getPassword());
+        UserPO userPO = authenticate(req.getUsername(), req.getPassword());
         //创建Token
+
         return new LoginResp();
     }
 
@@ -45,17 +50,23 @@ public class AuthService implements IAuthService {
         }
     }
 
+    /**
+     * 用户密码认证，比较传参和数据库中的用户名密码是否相等
+     */
     @Override
-    public UserDO authenticate(String username, String password) {
-        //password应该是摘要算法处理后的加密字符串
-        //且是查数据库进行校验
-        //这里先简化
-        if (!"kwseeker".equalsIgnoreCase(username) && !"admin".equalsIgnoreCase(username)) {
+    public UserPO authenticate(String username, String password) {
+        UserPO userPO = userService.getUserByUsername(username);
+        if (userPO == null) {
             throw ServiceExceptionUtil.exception(ErrorCodes.AUTH_LOGIN_BAD_CREDENTIALS);
         }
-        if (!"123456".equals(password)) {
+        //用户是否有效
+        if (ObjectUtil.equal(userPO.getStatus(), CommonStatusEnum.DISABLE.getStatus())) {
+            throw ServiceExceptionUtil.exception(ErrorCodes.AUTH_LOGIN_USER_DISABLED);
+        }
+        //密码是否正确
+        if (userService.isPasswordMatch(password, userPO.getPassword())) {
             throw ServiceExceptionUtil.exception(ErrorCodes.AUTH_LOGIN_BAD_CREDENTIALS);
         }
-        return new UserDO("admin".equalsIgnoreCase(username)? 100L:101L, username, password);
+        return userPO;
     }
 }

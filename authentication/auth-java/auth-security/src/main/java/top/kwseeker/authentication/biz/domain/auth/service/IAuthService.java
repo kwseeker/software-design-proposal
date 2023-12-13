@@ -2,7 +2,7 @@ package top.kwseeker.authentication.biz.domain.auth.service;
 
 import top.kwseeker.authentication.biz.domain.auth.model.LoginReq;
 import top.kwseeker.authentication.biz.domain.auth.model.LoginResp;
-import top.kwseeker.authentication.biz.domain.auth.model.dataobject.UserDO;
+import top.kwseeker.authentication.biz.infrastructure.dal.po.UserPO;
 
 public interface IAuthService {
 
@@ -14,5 +14,5 @@ public interface IAuthService {
      */
     LoginResp login(LoginReq req);
 
-    UserDO authenticate(String username, String password);
+    UserPO authenticate(String username, String password);
 }
