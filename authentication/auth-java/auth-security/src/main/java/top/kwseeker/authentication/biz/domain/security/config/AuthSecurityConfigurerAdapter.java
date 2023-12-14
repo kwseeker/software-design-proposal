@@ -2,6 +2,7 @@ package top.kwseeker.authentication.biz.domain.security.config;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +18,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.servlet.mvc.condition.PathPatternsRequestCondition;
+import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import top.kwseeker.authentication.biz.domain.security.core.filter.TokenAuthenticationFilter;
@@ -25,9 +28,11 @@ import top.kwseeker.authentication.biz.domain.security.core.handler.Authenticati
 
 import javax.annotation.Resource;
 import javax.annotation.security.PermitAll;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+@Slf4j
 @Configuration
 //@EnableConfigurationProperties(AuthSecurityProperties.class)
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
@@ -146,10 +151,24 @@ public class AuthSecurityConfigurerAdapter  {
             if (!handlerMethod.hasMethodAnnotation(PermitAll.class)) {
                 continue;
             }
-            if (entry.getKey().getPatternsCondition() == null) {
+
+            //注意SpringMVC不同版本差异
+            //旧版本路径信息在 RequestMappingInfo.patternsCondition 中存储
+            //新版本路径信息在 RequestMappingInfo.pathPatternsCondition 中存储
+            //这里应该兼容一下
+            PatternsRequestCondition patternsCondition = entry.getKey().getPatternsCondition();
+            PathPatternsRequestCondition pathPatternsCondition = entry.getKey().getPathPatternsCondition();
+            if (patternsCondition == null && pathPatternsCondition == null) {
                 continue;
             }
-            Set<String> urls = entry.getKey().getPatternsCondition().getPatterns();
+            Set<String> urls = new HashSet<>();
+            if (patternsCondition != null) {
+                urls.addAll(patternsCondition.getPatterns());
+            }
+            if (pathPatternsCondition != null) {
+                urls.addAll(pathPatternsCondition.getPatternValues());
+            }
+
             // 根据请求方法，添加到 result 结果
             entry.getKey().getMethodsCondition().getMethods().forEach(requestMethod -> {
                 switch (requestMethod) {
@@ -168,6 +187,7 @@ public class AuthSecurityConfigurerAdapter  {
                 }
             });
         }
+        log.debug("PermitAll request urls: {}", result);
         return result;
     }
 

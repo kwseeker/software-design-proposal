@@ -40,8 +40,8 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public boolean isPasswordMatch(String actualPassword, String expectPassword) {
-        return passwordEncoder.matches(actualPassword, expectPassword);
+    public boolean isPasswordMatch(String rawPassword, String encodedPassword) {
+        return passwordEncoder.matches(rawPassword, encodedPassword);
     }
 
     private String encodePassword(String password) {

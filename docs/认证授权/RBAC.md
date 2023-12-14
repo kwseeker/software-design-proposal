@@ -58,7 +58,7 @@ RBAC权限控制系统重点和难点在于怎么设计权限控制的表。
 
 ![](../imgs/rbac-LiHaodong-pre.png)
 
-可以看到这个项目中**没有定义权限表**（或者说**sys_menu就是权限表**），而是直接**将角色绑定到资源**上（借助`sys_role_menu`），看代码里面用的`Spring Security`框架，`@PreAuthorize`权限认证表达式都是`hasAuthority('<权限标识>')")`，没有用到`hasPermission()`（也没用`hasRole()`），可能没有那么细粒度的权限需求；
+可以看到这个项目中**没有定义权限表**，而是直接**将角色绑定到资源**上（借助`sys_role_menu`），或者说**sys_menu就是资源权限表**（这个更恰当），看代码里面用的`Spring Security`框架，`@PreAuthorize`权限认证表达式都是`hasAuthority('<权限标识>')")`，没有用到`hasPermission()`（也没用`hasRole()`），可能没有那么细粒度的权限需求；
 
 `sys_dept`部门表其实是上面说的用户组，通过 `sys_role_dept` 关联到`sys_role`角色表；
 

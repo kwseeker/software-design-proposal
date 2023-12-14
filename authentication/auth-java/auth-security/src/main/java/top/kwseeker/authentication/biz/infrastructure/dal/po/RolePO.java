@@ -3,8 +3,10 @@ package top.kwseeker.authentication.biz.infrastructure.dal.po;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import top.kwseeker.authentication.biz.common.enums.CommonStatusEnum;
 import top.kwseeker.authentication.biz.infrastructure.dal.common.enums.DataScopeEnum;
 import top.kwseeker.authentication.biz.infrastructure.dal.common.enums.RoleTypeEnum;
@@ -15,6 +17,8 @@ import java.util.Set;
 
 @TableName(value = "system_role", autoResultMap = true)
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class RolePO extends TenantBasePO {
 

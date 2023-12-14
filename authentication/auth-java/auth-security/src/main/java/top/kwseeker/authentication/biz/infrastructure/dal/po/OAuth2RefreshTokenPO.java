@@ -1,33 +1,27 @@
 package top.kwseeker.authentication.biz.infrastructure.dal.po;
 
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import top.kwseeker.authentication.biz.common.enums.UserTypeEnum;
-import top.kwseeker.authentication.biz.infrastructure.dal.po.base.TenantBasePO;
+import top.kwseeker.authentication.biz.infrastructure.dal.po.base.BasePO;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@TableName(value = "system_oauth2_token", autoResultMap = true)
+@TableName(value = "system_oauth2_refresh_token", autoResultMap = true)
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-public class OAuth2TokenPO extends TenantBasePO {
+public class OAuth2RefreshTokenPO extends BasePO {
 
     /**
-     * 编号，数据库递增
+     * 编号，数据库字典
      */
-    @TableId
     private Long id;
-    /**
-     * 访问令牌
-     */
-    private String accessToken;
     /**
      * 刷新令牌
      */
@@ -44,6 +38,8 @@ public class OAuth2TokenPO extends TenantBasePO {
     private Integer userType;
     /**
      * 客户端编号
+     * <p>
+     * 关联 {@link OAuth2ClientPO#getClientId()}
      */
     private String clientId;
     /**

@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import top.kwseeker.authentication.biz.common.enums.CommonStatusEnum;
+import top.kwseeker.authentication.biz.infrastructure.dal.common.enums.SexEnum;
 import top.kwseeker.authentication.biz.infrastructure.dal.mybatis.type.JsonLongSetTypeHandler;
 import top.kwseeker.authentication.biz.infrastructure.dal.po.base.TenantBasePO;
 

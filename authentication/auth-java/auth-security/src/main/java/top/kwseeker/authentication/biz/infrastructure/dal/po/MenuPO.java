@@ -2,8 +2,10 @@ package top.kwseeker.authentication.biz.infrastructure.dal.po;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import top.kwseeker.authentication.biz.common.enums.CommonStatusEnum;
 import top.kwseeker.authentication.biz.infrastructure.dal.common.enums.MenuTypeEnum;
 import top.kwseeker.authentication.biz.infrastructure.dal.po.base.BasePO;
@@ -16,6 +18,8 @@ import top.kwseeker.authentication.biz.infrastructure.dal.po.base.BasePO;
  */
 @TableName("system_menu")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class MenuPO extends BasePO {
 

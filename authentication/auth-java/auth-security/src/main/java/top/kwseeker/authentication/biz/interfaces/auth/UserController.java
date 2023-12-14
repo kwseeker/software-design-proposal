@@ -13,7 +13,7 @@ import javax.annotation.Resource;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/auth/user")
 public class UserController {
 
     @Resource

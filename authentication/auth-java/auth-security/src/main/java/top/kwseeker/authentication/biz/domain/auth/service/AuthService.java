@@ -9,8 +9,11 @@ import org.springframework.stereotype.Service;
 import top.kwseeker.authentication.biz.common.enums.CommonStatusEnum;
 import top.kwseeker.authentication.biz.common.exception.ErrorCodes;
 import top.kwseeker.authentication.biz.common.exception.ServiceExceptionUtil;
+import top.kwseeker.authentication.biz.domain.auth.common.constants.OAuth2ClientConstants;
+import top.kwseeker.authentication.biz.domain.auth.convert.AuthConvert;
 import top.kwseeker.authentication.biz.domain.auth.model.LoginReq;
 import top.kwseeker.authentication.biz.domain.auth.model.LoginResp;
+import top.kwseeker.authentication.biz.infrastructure.dal.po.OAuth2TokenPO;
 import top.kwseeker.authentication.biz.infrastructure.dal.po.UserPO;
 
 import javax.annotation.Resource;
@@ -25,6 +28,8 @@ public class AuthService implements IAuthService {
     private CaptchaService captchaService;
     @Resource
     private IUserService userService;
+    @Resource
+    private IOAuth2TokenService oauth2TokenService;
 
     @Override
     public LoginResp login(LoginReq req) {
@@ -33,8 +38,8 @@ public class AuthService implements IAuthService {
         //用户名密码验证
         UserPO userPO = authenticate(req.getUsername(), req.getPassword());
         //创建Token
-
-        return new LoginResp();
+        OAuth2TokenPO tokenPO = oauth2TokenService.createAccessToken(userPO, OAuth2ClientConstants.CLIENT_ID_DEFAULT, null);
+        return AuthConvert.INSTANCE.convert(tokenPO);
     }
 
     private void validateCaptcha(LoginReq req) {
@@ -64,7 +69,7 @@ public class AuthService implements IAuthService {
             throw ServiceExceptionUtil.exception(ErrorCodes.AUTH_LOGIN_USER_DISABLED);
         }
         //密码是否正确
-        if (userService.isPasswordMatch(password, userPO.getPassword())) {
+        if (!userService.isPasswordMatch(password, userPO.getPassword())) {
             throw ServiceExceptionUtil.exception(ErrorCodes.AUTH_LOGIN_BAD_CREDENTIALS);
         }
         return userPO;
