@@ -1,0 +1,42 @@
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # 数据库命名包含多个单词官方建议使用下划线连接
+    url: jdbc:mysql://localhost:3306/auth_security?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=UTC
+    username: root
+    password: 123456
+    druid:
+      # 初始化连接数
+      initial-size: 5
+      # 连接池中最小的空闲连接数
+      min-idle: 5
+      # 连接吃中最大的活跃连接数
+      max-active: 20
+      # 连接等待最大时间
+      max-wait: 60000
+      # 检测连接池中空闲连接的时间间隔
+      time-between-eviction-runs-millis: 60000
+      # 连接在池中保持空闲的最长时间
+      min-evictable-idle-time-millis: 300000
+      # 用于检测连接是否有效的SQL语句
+      validation-query: SELECT 1 FROM DUAL
+      # 当连接处于空闲状态时，是否执行验证查询
+      test-while-idle: true
+      # 当从连接池中借用连接时，是否执行验证查询
+      test-on-borrow: false
+      # 当归还连接给连接池时，是否执行验证查询
+      test-on-return: false
+      # 是否使用预处理语句来提高性能
+      pool-prepared-statements: true
+      # 每个连接允许的最大预处理语句数量
+      max-pool-prepared-statement-per-connection-size: 20
+      # 连接池中连接的过滤器列表
+      # filters: stat,wall,log4j
+      filters: stat,wall
+      # 连接属性设置：是否合并SQL语句，设置慢查询阈值
+      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=1000
+
+auth:
+  captcha:
+    enable: false
