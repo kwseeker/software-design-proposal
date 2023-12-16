@@ -82,8 +82,8 @@ CREATE TABLE `system_user`  (
 BEGIN;
 INSERT INTO `system_user` (`id`, `username`, `password`, `nickname`, `remark`, `dept_id`, `post_ids`, `email`, `mobile`, `sex`, `avatar`, `status`, `login_ip`, `login_date`, `creator`, `create_time`, `updater`, `update_time`, `deleted`, `tenant_id`)
 VALUES
-    (1, 'admin', '$2a$10$mRMIYLDtRHlf6.9ipiqH1.Z.bh/R9dO9d5iHiGYPigi6r5KOoR2Wm', 'admin', '管理员', 100, '[1]', 'admin@gmail.com', '13723336666', 1, '', 0, '127.0.0.1', '2023-07-24 08:41:23', 'admin', '2021-01-05 17:03:47', NULL, '2023-07-24 08:41:23', b'0', 1),
-    (100, 'kwseeker', '$2a$10$mRMIYLDtRHlf6.9ipiqH1.Z.bh/R9dO9d5iHiGYPigi6r5KOoR2Wm', 'kwseeker', '管理员', 100, '[1]', 'kwseeker@gmail.com', '13711112222', 1, '', 0, '127.0.0.1', '2023-07-24 08:41:23', 'admin', '2021-01-05 17:03:47', NULL, '2023-07-24 08:41:23', b'0', 1);
+    (1, 'admin', '$2a$04$ZnfolHweYI0GekDWQcUbGO29qiQ/9fRmGFY/ko2Ir4YKS5mciPKEm', 'admin', '管理员', 100, '[1]', 'admin@gmail.com', '13723336666', 1, '', 0, '127.0.0.1', '2023-07-24 08:41:23', 'admin', '2021-01-05 17:03:47', NULL, '2023-07-24 08:41:23', b'0', 1),
+    (100, 'kwseeker', '$2a$04$ZnfolHweYI0GekDWQcUbGO29qiQ/9fRmGFY/ko2Ir4YKS5mciPKEm', 'kwseeker', '管理员', 100, '[1]', 'kwseeker@gmail.com', '13711112222', 1, '', 0, '127.0.0.1', '2023-07-24 08:41:23', 'admin', '2021-01-05 17:03:47', NULL, '2023-07-24 08:41:23', b'0', 1);
 COMMIT;
 
 DROP TABLE IF EXISTS `system_role`;
@@ -129,6 +129,15 @@ CREATE TABLE `system_user_role`  (
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 31 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '用户和角色关联表';
 
+BEGIN;
+INSERT INTO `system_user_role` (`id`, `user_id`, `role_id`, `creator`, `create_time`, `updater`, `update_time`, `deleted`, `tenant_id`)
+VALUES
+    # admin -> super_admin
+    (1, 1, 1, '', '2022-01-11 13:19:45', '', '2022-05-12 12:35:17', b'0', 1),
+    # kwseeker -> common
+    (2, 100, 2, '', '2022-01-11 13:19:45', '', '2022-05-12 12:35:17', b'0', 1);
+COMMIT;
+
 DROP TABLE IF EXISTS `system_role_menu`;
 CREATE TABLE `system_role_menu`  (
     `id` bigint NOT NULL AUTO_INCREMENT COMMENT '自增编号',
@@ -141,7 +150,19 @@ CREATE TABLE `system_role_menu`  (
     `deleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否删除',
     `tenant_id` bigint NOT NULL DEFAULT 0 COMMENT '租户编号',
     PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2873 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '角色和菜单关联表';
+) ENGINE = InnoDB AUTO_INCREMENT = 100 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '角色和菜单关联表';
+
+BEGIN;
+INSERT INTO `system_role_menu` (`id`, `role_id`, `menu_id`, `creator`, `create_time`, `updater`, `update_time`, `deleted`, `tenant_id`)
+VALUES
+    # super_admin
+    (1, 1, 1, '1', '2022-02-22 00:56:14', '1', '2022-02-22 00:56:14', b'0', 0),
+    (2, 1, 100, '1', '2022-02-22 00:56:14', '1', '2022-02-22 00:56:14', b'0', 0),
+    (3, 1, 1001, '1', '2022-02-22 00:56:14', '1', '2022-02-22 00:56:14', b'0', 0),
+    (4, 1, 1002, '1', '2022-02-22 00:56:14', '1', '2022-02-22 00:56:14', b'0', 0),
+    # common
+    (5, 100, 1001, '1', '2022-02-22 00:56:14', '1', '2022-02-22 00:56:14', b'0', 0);
+COMMIT;
 
 DROP TABLE IF EXISTS `system_menu`;
 CREATE TABLE `system_menu`  (
@@ -166,6 +187,15 @@ CREATE TABLE `system_menu`  (
     `deleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否删除',
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 2303 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '菜单权限表';
+
+BEGIN;
+INSERT INTO `system_menu` (`id`, `name`, `permission`, `type`, `sort`, `parent_id`, `path`, `icon`, `component`, `component_name`, `status`, `visible`, `keep_alive`, `always_show`, `creator`, `create_time`, `updater`, `update_time`, `deleted`)
+VALUES
+    (1, '系统管理', '', 1, 10, 0, '/system', 'system', NULL, NULL, 0, b'1', b'1', b'1', 'admin', '2021-01-05 17:03:48', '1', '2022-04-20 17:03:10', b'0'),
+    (100, '用户管理', 'system:user:list', 2, 1, 1, 'user', 'user', 'system/user/index', 'SystemUser', 0, b'1', b'1', b'1', 'admin', '2021-01-05 17:03:48', '1', '2023-04-08 08:31:59', b'0'),
+    (1001, '用户查询', 'system:user:query', 3, 1, 100, '', '#', '', NULL, 0, b'1', b'1', b'1', 'admin', '2021-01-05 17:03:48', '', '2022-04-20 17:03:10', b'0'),
+    (1002, '用户新增', 'system:user:create', 3, 2, 100, '', '', '', NULL, 0, b'1', b'1', b'1', 'admin', '2021-01-05 17:03:48', '1', '2022-04-20 17:03:10', b'0');
+COMMIT;
 
 DROP TABLE IF EXISTS `system_oauth2_client`;
 CREATE TABLE `system_oauth2_client`  (

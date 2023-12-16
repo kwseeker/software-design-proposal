@@ -1,4 +1,4 @@
-package top.kwseeker.authentication.biz.domain.auth.model.bo;
+package top.kwseeker.authentication.biz.domain.auth.model.vo;
 
 import lombok.Data;
 
@@ -9,7 +9,7 @@ import javax.validation.constraints.Size;
 import java.util.Set;
 
 @Data
-public class UserBaseBO {
+public class UserBaseVO {
 
     @NotBlank(message = "用户账号不能为空")
     @Pattern(regexp = "^[a-zA-Z0-9]{4,30}$", message = "用户账号由 数字、字母 组成")

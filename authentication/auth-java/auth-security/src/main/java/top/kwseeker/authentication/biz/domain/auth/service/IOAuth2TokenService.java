@@ -14,4 +14,8 @@ public interface IOAuth2TokenService {
     OAuth2RefreshTokenPO createOAuth2RefreshToken(UserPO userPO, OAuth2ClientPO clientPO);
 
     OAuth2TokenPO createOAuth2Token(OAuth2RefreshTokenPO refreshTokenPO, OAuth2ClientPO clientPO);
+
+    OAuth2TokenPO checkAccessToken(String accessToken);
+
+    OAuth2TokenPO getAccessToken(String accessToken);
 }

@@ -8,4 +8,9 @@ import top.kwseeker.authentication.biz.infrastructure.dal.po.OAuth2TokenPO;
 @Repository
 public class OAuth2TokenRepository extends ServiceImpl<OAuth2TokenMapper, OAuth2TokenPO>
         implements IOAuth2TokenRepository {
+
+    @Override
+    public OAuth2TokenPO get(String accessToken) {
+        return getBaseMapper().selectOne(OAuth2TokenPO::getAccessToken, accessToken);
+    }
 }

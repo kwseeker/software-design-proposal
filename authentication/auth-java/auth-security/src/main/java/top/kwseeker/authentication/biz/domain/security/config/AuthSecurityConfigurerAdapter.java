@@ -22,6 +22,9 @@ import org.springframework.web.servlet.mvc.condition.PathPatternsRequestConditio
 import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
+import top.kwseeker.authentication.biz.domain.auth.service.IPermissionService;
+import top.kwseeker.authentication.biz.domain.security.AuthorizationService;
+import top.kwseeker.authentication.biz.domain.security.AuthorizationServiceImpl;
 import top.kwseeker.authentication.biz.domain.security.core.filter.TokenAuthenticationFilter;
 import top.kwseeker.authentication.biz.domain.security.core.handler.AccessDeniedHandlerImpl;
 import top.kwseeker.authentication.biz.domain.security.core.handler.AuthenticationEntryPointImpl;
@@ -61,6 +64,11 @@ public class AuthSecurityConfigurerAdapter  {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(authSecurityProperties.getPasswordEncoderLength());
+    }
+
+    @Bean("ss")
+    public AuthorizationService authorizationService(IPermissionService permissionService) {
+        return new AuthorizationServiceImpl(permissionService);
     }
 
     /**

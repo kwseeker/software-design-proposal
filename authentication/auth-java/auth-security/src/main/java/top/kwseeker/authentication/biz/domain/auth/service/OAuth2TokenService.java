@@ -3,6 +3,10 @@ package top.kwseeker.authentication.biz.domain.auth.service;
 import cn.hutool.core.util.IdUtil;
 import org.springframework.stereotype.Service;
 import top.kwseeker.authentication.biz.common.enums.UserTypeEnum;
+import top.kwseeker.authentication.biz.common.exception.GlobalErrorCodes;
+import top.kwseeker.authentication.biz.common.exception.ServiceException;
+import top.kwseeker.authentication.biz.common.exception.ServiceExceptionUtil;
+import top.kwseeker.authentication.biz.common.util.DateUtil;
 import top.kwseeker.authentication.biz.infrastructure.dal.po.*;
 import top.kwseeker.authentication.biz.infrastructure.repository.IOAuth2RefreshTokenRepository;
 import top.kwseeker.authentication.biz.infrastructure.repository.IOAuth2TokenRepository;
@@ -60,6 +64,30 @@ public class OAuth2TokenService implements IOAuth2TokenService {
         oauth2TokenRepository.save(tokenPO);
         // 记录到 Redis 中 TODO
         //oauth2AccessTokenRedisDAO.set(tokenPO);
+        return tokenPO;
+    }
+
+    @Override
+    public OAuth2TokenPO getAccessToken(String accessToken) {
+        // TODO 优先从Redis
+        // 再尝试从MySQL查
+        OAuth2TokenPO tokenPO = oauth2TokenRepository.get(accessToken);
+        if (tokenPO != null && !DateUtil.isExpired(tokenPO.getExpiresTime())) {
+            // TODO 缓存到Redis
+        }
+        return tokenPO;
+    }
+
+    @Override
+    public OAuth2TokenPO checkAccessToken(String accessToken) {
+        OAuth2TokenPO tokenPO = getAccessToken(accessToken);
+        // 检查token有效性
+        if (tokenPO == null) {
+            throw ServiceExceptionUtil.exception(GlobalErrorCodes.UNAUTHORIZED.getCode(), "访问令牌不存在");
+        }
+        if (DateUtil.isExpired(tokenPO.getExpiresTime())) {
+            throw ServiceExceptionUtil.exception(GlobalErrorCodes.UNAUTHORIZED.getCode(), "访问令牌已过期");
+        }
         return tokenPO;
     }
 

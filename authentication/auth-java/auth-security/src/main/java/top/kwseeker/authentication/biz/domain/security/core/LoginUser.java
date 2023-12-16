@@ -3,6 +3,7 @@ package top.kwseeker.authentication.biz.domain.security.core;
 import cn.hutool.core.map.MapUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.experimental.Accessors;
 import top.kwseeker.authentication.biz.common.enums.UserTypeEnum;
 
 import java.util.HashMap;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 @Data
+@Accessors(chain = true)
 public class LoginUser {
 
     private Long id;
@@ -18,7 +20,7 @@ public class LoginUser {
      * <p>
      * 关联 {@link UserTypeEnum}
      */
-    //private Integer userType;
+    private Integer userType;
     /**
      * 租户编号
      */
