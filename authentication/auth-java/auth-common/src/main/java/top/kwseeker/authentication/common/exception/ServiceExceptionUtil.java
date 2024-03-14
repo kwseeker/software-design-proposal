@@ -1,4 +1,4 @@
-package top.kwseeker.authentication.biz.common.exception;
+package top.kwseeker.authentication.common.exception;
 
 import lombok.extern.slf4j.Slf4j;
 

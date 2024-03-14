@@ -66,6 +66,7 @@ public class AuthSecurityConfigurerAdapter  {
         return new BCryptPasswordEncoder(authSecurityProperties.getPasswordEncoderLength());
     }
 
+    //自定义权限检查，由 @PreAuthorize() 注入到过滤器流程，在 FilterSecurityInterceptor 中调用
     @Bean("ss")
     public AuthorizationService authorizationService(IPermissionService permissionService) {
         return new AuthorizationServiceImpl(permissionService);

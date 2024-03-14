@@ -6,11 +6,14 @@
 
     <groupId>top.kwseeker.authentication</groupId>
     <artifactId>auth-java</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>${revision}</version>
     <packaging>pom</packaging>
     <modules>
         <module>auth-security</module>
         <module>auth-shiro</module>
+        <module>auth-oauth2-service</module>
+        <module>auth-user-service</module>
+        <module>auth-common</module>
     </modules>
 
     <properties>
@@ -20,8 +23,10 @@
         <maven-surefire-plugin.version>3.1.0</maven-surefire-plugin.version>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
 
+        <revision>1.0-SNAPSHOT</revision>
         <spring-boot.version>2.7.14</spring-boot.version>
         <shiro.version>1.13.0</shiro.version>
+        <guava.version>32.0.1-jre</guava.version>
         <hutool.version>5.8.20</hutool.version>
         <lombok.version>1.18.30</lombok.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
@@ -40,6 +45,11 @@
                 <groupId>org.apache.shiro</groupId>
                 <artifactId>shiro-spring-boot-starter</artifactId>
                 <version>${shiro.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
             </dependency>
             <dependency>
                 <groupId>cn.hutool</groupId>

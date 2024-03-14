@@ -83,10 +83,10 @@ public class OAuth2TokenService implements IOAuth2TokenService {
         OAuth2TokenPO tokenPO = getAccessToken(accessToken);
         // 检查token有效性
         if (tokenPO == null) {
-            throw ServiceExceptionUtil.exception(GlobalErrorCodes.UNAUTHORIZED.getCode(), "访问令牌不存在");
+            throw ServiceExceptionUtil.exception(GlobalErrorCodes.UNAUTHORIZED, "访问令牌不存在");
         }
         if (DateUtil.isExpired(tokenPO.getExpiresTime())) {
-            throw ServiceExceptionUtil.exception(GlobalErrorCodes.UNAUTHORIZED.getCode(), "访问令牌已过期");
+            throw ServiceExceptionUtil.exception(GlobalErrorCodes.UNAUTHORIZED, "访问令牌已过期");
         }
         return tokenPO;
     }
