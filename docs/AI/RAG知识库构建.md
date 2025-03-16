@@ -6,6 +6,12 @@ RAG (Retrieval-Augmented Generation) 意为检索增强生成，即提供检索�
 
 RAG 会接受输入并检索出一组相关/支撑的文档，并给出文档的来源（例如维基百科）。这些文档作为上下文和输入的原始提示词组合，送给文本生成器得到最终的输出。RAG 让语言模型不用重新训练就能够获取最新的信息，基于检索生成产生可靠的输出。
 
+开源项目（可以深入理解内部实现）：
+
++ [Langchain-Chatchat](https://github.com/chatchat-space/Langchain-Chatchat)
+
+  基于 Langchain 与 ChatGLM, Qwen 与 Llama 等语言模型实现的 RAG 与 Agent 应用，开发语言：TS、Python。
+
 ##  RAG 知识库工作流程和架构
 
 比如 LangChain RAG 的流程：
