@@ -312,11 +312,11 @@ MCP 客户端和服务器之间支持通过两种协议交互，均使用[JSON-R
 
 ### AI 应用 、LLM 与 MCP 对接
 
-详细参考 [MCP-Cherry-Studio.md](MCP-Cherry-Studio.md)
-
 **Cherry Studio 集成 MCP 调用外部资源的处理流程是借助 function calling 实现的**，所以处理流程和 function calling 一样。
 
-**原理**：向 AI 模型发送消息（请求），如果启用 MCP Tool，消息中会附带 Tool 信息（会转换为模型 API Function Calling Tool 格式），当 AI 模型识别出自己需要调用 MCP Tool 会返回调用 MCP Tool 的参数信息，然后当前请求结束；AI 应用获取到模型返回的参数信息，使用 MCP 客户端向 MCP Server 发送调用请求，获取调用结果后将结果数据追加到之前的消息中，再次向 AI 模型发送消息，AI 模型会根据 MCP Tool 调用结果进行响应。
+**原理**：向 AI 模型发送消息（请求），如果启用 MCP Tool，应用需要在消息中会附带 Tool 信息（会转换为模型 API Function Calling Tool 格式），当 AI 模型识别出自己需要调用 MCP Tool 会返回调用 MCP Tool 需要的参数信息，然后当前请求结束；AI 应用获取到模型返回的参数信息，使用 MCP 客户端向 MCP Server 发送调用请求，获取调用结果后将结果数据追加到之前的消息中，再次向 AI 模型发送消息，AI 模型会根据 MCP Tool 调用结果进行响应。
+
+详细参考 [MCP-Cherry-Studio.md](MCP-Cherry-Studio.md)
 
 ### 本地镜像编译
 
